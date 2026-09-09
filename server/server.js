@@ -16,7 +16,7 @@ import { errorHandler, notFound } from './middleware/error.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+export const app = express();
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(
@@ -53,13 +53,15 @@ app.use('/api/stats', statsRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-connectDb()
-  .then(() => {
-    app.listen(config.port, () => {
-      console.log(`Al-Saad Furniture API running on port ${config.port}`);
+if (process.env.VERCEL !== '1') {
+  connectDb()
+    .then(() => {
+      app.listen(config.port, () => {
+        console.log(`Al-Saad Furniture API running on port ${config.port}`);
+      });
+    })
+    .catch((error) => {
+      console.error('Failed to connect to MongoDB:', error.message);
+      process.exit(1);
     });
-  })
-  .catch((error) => {
-    console.error('Failed to connect to MongoDB:', error.message);
-    process.exit(1);
-  });
+}

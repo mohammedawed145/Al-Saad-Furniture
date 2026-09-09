@@ -92,8 +92,10 @@ Home → Products (search / filter) → Product details → Contact Us (`/contac
 
 ### Deployment
 
-- Deploy `server/` as a Node web service on Render using `render.yaml`.
+- Deploy `server/` as a Vercel project. Set its Root Directory to `server`; Vercel will use `api/index.js` as the serverless entry point.
 - Deploy `client/` as a Vite project on Vercel with build command `npm run build` and output directory `dist`.
-- Set `VITE_API_URL` in Vercel to the Render API URL including `/api`, for example `https://your-api.onrender.com/api`.
-- Set `CLIENT_ORIGIN` in Render to the deployed Vercel URL.
+- Set `VITE_API_URL` to the Vercel API project URL including `/api`, for example `https://your-api.vercel.app/api`.
+- Set `CLIENT_ORIGIN` in the API project's Vercel environment to the deployed frontend Vercel URL.
 - Run `npm run seed` once against the production database using the production environment variables.
+
+Vercel's local filesystem is temporary. Product and category uploads should be moved to object storage (such as Cloudinary or S3) before relying on persistent production uploads.
