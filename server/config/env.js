@@ -18,4 +18,9 @@ export const config = {
   sitePhone: process.env.SITE_PHONE || '+201064990995',
   siteWhatsapp: process.env.SITE_WHATSAPP || '201064990995',
   siteEmail: process.env.SITE_EMAIL || 'asaadfurniture19@gmail.com',
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || '',
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || '',
+  resendApiKey: process.env.RESEND_API_KEY || '',
+  notificationEmail: process.env.NOTIFICATION_EMAIL || '',
 };

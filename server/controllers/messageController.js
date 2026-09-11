@@ -1,6 +1,7 @@
 import { Message } from '../models/Message.js';
 import { Product } from '../models/Product.js';
 import { isValidEmail, requiredString } from '../utils/validate.js';
+import { notifyNewMessage } from '../services/notifications.js';
 
 export async function createMessage(req, res, next) {
   try {
@@ -32,6 +33,9 @@ export async function createMessage(req, res, next) {
       productId,
       productName,
       status: 'new',
+    });
+    notifyNewMessage(saved).catch((error) => {
+      console.error('Message notification failed:', error.message);
     });
     res.status(201).json({ message: 'Message received', id: saved._id });
   } catch (error) {

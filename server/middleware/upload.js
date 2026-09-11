@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
+import { config } from '../config/env.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +12,7 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-const storage = multer.diskStorage({
+const localStorage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
@@ -20,10 +21,14 @@ const storage = multer.diskStorage({
   },
 });
 
+export const usesCloudinary = Boolean(
+  config.cloudinaryCloudName && config.cloudinaryApiKey && config.cloudinaryApiSecret
+);
+
 const allowed = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
 
 export const upload = multer({
-  storage,
+  storage: usesCloudinary ? multer.memoryStorage() : localStorage,
   limits: { fileSize: 5 * 1024 * 1024, files: 10 },
   fileFilter: (_req, file, cb) => {
     if (!allowed.has(file.mimetype)) {

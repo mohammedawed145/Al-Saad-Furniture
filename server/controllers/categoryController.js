@@ -1,6 +1,6 @@
 import { Category } from '../models/Category.js';
 import { Product } from '../models/Product.js';
-import { deleteLocalImage, toPublicPath } from '../middleware/upload.js';
+import { deleteStoredImage, saveUploadedFile } from '../services/media.js';
 import { requiredString } from '../utils/validate.js';
 
 function slugify(value) {
@@ -26,7 +26,7 @@ export async function createCategory(req, res, next) {
     const nameEn = requiredString(req.body.nameEn, 'Name (EN)');
     const nameAr = requiredString(req.body.nameAr, 'Name (AR)');
     let image = req.body.image || '';
-    if (req.file) image = toPublicPath(req.file.filename);
+    if (req.file) image = await saveUploadedFile(req.file);
     const slug = slugify(req.body.slug || nameEn) || `category-${Date.now()}`;
     const category = await Category.create({ nameEn, nameAr, image, slug });
     res.status(201).json(category);
@@ -48,8 +48,8 @@ export async function updateCategory(req, res, next) {
     if (req.body.nameAr) category.nameAr = requiredString(req.body.nameAr, 'Name (AR)');
     if (req.body.slug) category.slug = slugify(req.body.slug);
     if (req.file) {
-      deleteLocalImage(category.image);
-      category.image = toPublicPath(req.file.filename);
+      deleteStoredImage(category.image);
+      category.image = await saveUploadedFile(req.file);
     } else if (typeof req.body.image === 'string') {
       category.image = req.body.image;
     }
@@ -68,7 +68,7 @@ export async function deleteCategory(req, res, next) {
     }
     const category = await Category.findByIdAndDelete(req.params.id);
     if (!category) return res.status(404).json({ message: 'Category not found' });
-    deleteLocalImage(category.image);
+    deleteStoredImage(category.image);
     res.json({ message: 'Category deleted' });
   } catch (error) {
     next(error);

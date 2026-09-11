@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Product } from '../models/Product.js';
 import { Category } from '../models/Category.js';
-import { deleteLocalImage, toPublicPath } from '../middleware/upload.js';
+import { deleteStoredImage, saveUploadedFiles } from '../services/media.js';
 import { escapeRegex, parseStringList, requiredString } from '../utils/validate.js';
 
 function parseExistingImages(value) {
@@ -79,7 +79,7 @@ export async function createProduct(req, res, next) {
     const exists = await Category.findById(category);
     if (!exists) return res.status(400).json({ message: 'Invalid category' });
 
-    const uploaded = (req.files || []).map((file) => toPublicPath(file.filename));
+    const uploaded = await saveUploadedFiles(req.files || []);
     const existing = parseExistingImages(req.body.existingImages);
     const product = await Product.create({
       nameEn,
@@ -120,9 +120,9 @@ export async function updateProduct(req, res, next) {
     }
 
     const keep = parseExistingImages(req.body.existingImages);
-    const uploaded = (req.files || []).map((file) => toPublicPath(file.filename));
+    const uploaded = await saveUploadedFiles(req.files || []);
     const removed = product.images.filter((image) => !keep.includes(image));
-    removed.forEach(deleteLocalImage);
+    removed.forEach(deleteStoredImage);
     product.images = [...keep, ...uploaded];
 
     await product.save();
@@ -137,7 +137,7 @@ export async function deleteProduct(req, res, next) {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
-    product.images.forEach(deleteLocalImage);
+    product.images.forEach(deleteStoredImage);
     res.json({ message: 'Product deleted' });
   } catch (error) {
     next(error);

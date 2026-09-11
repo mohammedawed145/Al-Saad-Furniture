@@ -7,6 +7,8 @@ import { ProductDetailsPage } from './pages/ProductDetailsPage';
 import { AboutPage } from './pages/AboutPage';
 import { BranchesPage } from './pages/BranchesPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { Analytics } from './components/Analytics';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminProductsPage } from './pages/admin/AdminProductsPage';
@@ -17,6 +19,7 @@ import { AdminMessagesPage } from './pages/admin/AdminMessagesPage';
 export default function App() {
   return (
     <BrowserRouter>
+      <Analytics />
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -25,6 +28,7 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/branches" element={<BranchesPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
         </Route>
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>

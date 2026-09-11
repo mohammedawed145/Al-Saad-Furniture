@@ -63,7 +63,7 @@ Seeded admin login uses `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env`.
 
 ### 4. Images
 
-Admin product and category uploads are stored in `server/uploads/` and served at `/uploads/...`.
+For local development, product and category uploads are stored in `server/uploads/` and served at `/uploads/...`. In production, configure Cloudinary with `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET`; uploads then persist across Vercel deployments.
 
 Allowed types: JPEG, PNG, WebP. Max size: 5MB per file (up to 10 images per product).
 
@@ -98,4 +98,4 @@ Home → Products (search / filter) → Product details → Contact Us (`/contac
 - Set `CLIENT_ORIGIN` in the API project's Vercel environment to the deployed frontend Vercel URL.
 - Run `npm run seed` once against the production database using the production environment variables.
 
-Vercel's local filesystem is temporary. Product and category uploads should be moved to object storage (such as Cloudinary or S3) before relying on persistent production uploads.
+Vercel's local filesystem is temporary. This project switches to Cloudinary automatically when its three Cloudinary environment variables are configured. To receive contact-form notifications, set `RESEND_API_KEY` and `NOTIFICATION_EMAIL`. For optional Google Analytics, set `VITE_GA_MEASUREMENT_ID` in the client project.

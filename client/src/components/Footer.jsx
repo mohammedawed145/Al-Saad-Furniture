@@ -101,7 +101,7 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-cream/10 py-6 text-center text-xs text-cream/50">{t.footer.rights}</div>
+      <div className="border-t border-cream/10 py-6 text-center text-xs text-cream/50">{t.footer.rights} <Link to="/privacy" className="underline hover:text-cream">{isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</Link></div>
     </footer>
   );
 }
