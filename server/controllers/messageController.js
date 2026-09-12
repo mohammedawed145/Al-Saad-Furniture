@@ -8,7 +8,7 @@ export async function createMessage(req, res, next) {
     const name = requiredString(req.body.name, 'Name');
     const email = requiredString(req.body.email, 'Email').toLowerCase();
     const phone = requiredString(req.body.phone, 'Phone');
-    const message = requiredString(req.body.message, 'Message', 8);
+    const message = requiredString(req.body.message, 'Message');
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: 'Invalid email address' });
     }

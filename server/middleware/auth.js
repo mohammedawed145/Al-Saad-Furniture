@@ -9,7 +9,10 @@ export async function requireAuth(req, res, next) {
     if (!token) {
       return res.status(401).json({ message: 'Authentication required' });
     }
-    const payload = jwt.verify(token, config.jwtSecret);
+    const payload = jwt.verify(token, config.jwtSecret, {
+      issuer: 'al-saad-api',
+      audience: 'al-saad-admin',
+    });
     const admin = await Admin.findById(payload.id);
     if (!admin) {
       return res.status(401).json({ message: 'Invalid session' });

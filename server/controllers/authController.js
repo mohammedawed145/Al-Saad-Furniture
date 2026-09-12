@@ -19,7 +19,11 @@ export async function login(req, res, next) {
     if (!match) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: admin._id }, config.jwtSecret, { expiresIn: '7d' });
+    const token = jwt.sign(
+      { id: admin._id },
+      config.jwtSecret,
+      { expiresIn: '12h', issuer: 'al-saad-api', audience: 'al-saad-admin' }
+    );
     res.json({ token, admin: admin.toSafeJSON() });
   } catch (error) {
     next(error);

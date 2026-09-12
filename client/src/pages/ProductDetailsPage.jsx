@@ -6,6 +6,9 @@ import { useFetch } from '../hooks/useFetch';
 import { useLang } from '../context/LanguageContext';
 import { mediaUrl } from '../services/api';
 
+const FALLBACK_PRODUCT_IMAGE =
+  'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1600&q=80';
+
 export function ProductDetailsPage() {
   const { id } = useParams();
   const { t, isAr } = useLang();
@@ -16,8 +19,8 @@ export function ProductDetailsPage() {
   if (error) return <div className="page-wrap py-16"><ErrorState message={t.productsPage.error} /></div>;
   if (!product) return <div className="page-wrap py-16"><EmptyState message={t.productsPage.empty} /></div>;
 
-  const name = isAr ? product.nameAr : product.nameEn;
-  const desc = isAr ? product.descriptionAr : product.descriptionEn;
+  const name = (isAr ? product.nameAr : product.nameEn) || product.name || 'Furniture piece';
+  const desc = (isAr ? product.descriptionAr : product.descriptionEn) || product.description || '';
   const features = isAr ? product.featuresAr : product.featuresEn;
   const category = isAr ? product.category?.nameAr : product.category?.nameEn;
   const images = product.images?.length ? product.images : [''];
@@ -29,7 +32,15 @@ export function ProductDetailsPage() {
       <div className="grid gap-12 lg:grid-cols-2">
         <div>
           <div className="overflow-hidden rounded-[2rem] bg-white">
-            <img src={current} alt={name} className="h-[520px] w-full object-cover transition duration-500" />
+            <img
+              src={current}
+              alt={name}
+              className="h-[520px] w-full object-cover transition duration-500"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+              }}
+            />
           </div>
           {images.length > 1 && (
             <div className="mt-4 grid grid-cols-4 gap-3">
@@ -40,7 +51,15 @@ export function ProductDetailsPage() {
                   onClick={() => setActive(index)}
                   className={`overflow-hidden rounded-2xl border ${active === index ? 'border-ink' : 'border-transparent'}`}
                 >
-                  <img src={mediaUrl(image)} alt="" className="h-24 w-full object-cover" />
+                  <img
+                    src={mediaUrl(image)}
+                    alt=""
+                    className="h-24 w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+                    }}
+                  />
                 </button>
               ))}
             </div>

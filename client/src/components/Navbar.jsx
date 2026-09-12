@@ -1,27 +1,21 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Link, NavLink } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { useLang } from '../context/LanguageContext';
 import logo from '../assets/al-saad-logo.jpeg';
 
-function LangSwitch() {
+function LangSwitch({ dark = false }) {
   const { lang, setLang } = useLang();
+  const activeClass = dark ? 'font-semibold text-cream' : 'font-semibold text-ink';
+  const idleClass = dark ? 'text-cream/65 hover:text-cream' : 'text-stone hover:text-ink';
+
   return (
     <div className="flex items-center gap-2 text-xs tracking-wide">
-      <button
-        type="button"
-        onClick={() => setLang('ar')}
-        className={lang === 'ar' ? 'font-semibold text-ink' : 'text-stone hover:text-ink'}
-      >
+      <button type="button" onClick={() => setLang('ar')} className={lang === 'ar' ? activeClass : idleClass}>
         العربية
       </button>
-      <span className="text-ink/30">|</span>
-      <button
-        type="button"
-        onClick={() => setLang('en')}
-        className={lang === 'en' ? 'font-semibold text-ink' : 'text-stone hover:text-ink'}
-      >
+      <span className={dark ? 'text-cream/30' : 'text-ink/30'}>|</span>
+      <button type="button" onClick={() => setLang('en')} className={lang === 'en' ? activeClass : idleClass}>
         English
       </button>
     </div>
@@ -31,8 +25,6 @@ function LangSwitch() {
 export function Navbar() {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
-  const location = useLocation();
-
   const links = [
     { to: '/', label: t.nav.home },
     { to: '/products', label: t.nav.products },
@@ -70,54 +62,42 @@ export function Navbar() {
         </div>
         <button
           type="button"
-          className="rounded-full border border-ink/10 p-2 lg:hidden"
-          onClick={() => setOpen(true)}
+          className="rounded-full border border-ink bg-ink p-2 text-cream shadow-md lg:hidden"
+          onClick={() => setOpen((current) => !current)}
           aria-label={t.common.menu}
+          aria-expanded={open}
         >
           <Menu className="h-5 w-5" />
         </button>
       </div>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-50 bg-ink/40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setOpen(false)}
-          >
-            <motion.aside
-              initial={{ x: location.pathname.startsWith('/') ? 40 : 0, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: 'spring', damping: 24, stiffness: 260 }}
-              className="absolute inset-y-0 end-0 w-[86%] max-w-sm bg-cream p-8"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="mb-10 flex items-center justify-between">
-                <span className="flex items-center gap-3 font-display text-2xl">
-                  <img src={logo} alt={t.brand} className="h-12 w-12 rounded-full object-cover" />
-                  {t.brand}
-                </span>
-                <button type="button" onClick={() => setOpen(false)} aria-label={t.common.close}>
-                  <X />
-                </button>
-              </div>
-              <div className="flex flex-col gap-5">
-                {links.map((link) => (
-                  <NavLink key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-lg text-ink">
-                    {link.label}
-                  </NavLink>
-                ))}
-                <LangSwitch />
-                <Link to="/contact" onClick={() => setOpen(false)} className="btn-primary mt-4">
-                  {t.nav.contact}
-                </Link>
-              </div>
-            </motion.aside>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+      {open && (
+        <div className="fixed inset-x-0 top-20 z-[60] border-b border-gold/25 bg-ink px-5 py-6 text-cream shadow-2xl lg:hidden">
+          <nav className="mx-auto flex max-w-md flex-col gap-1">
+            {links.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `rounded-lg px-4 py-3 text-base transition ${
+                    isActive ? 'bg-cream/10 text-gold' : 'text-cream/90 hover:bg-cream/10'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            <div className="mt-3 flex items-center justify-between border-t border-cream/15 pt-5">
+              <LangSwitch dark />
+              <Link to="/contact" onClick={() => setOpen(false)} className="btn-primary px-5 py-2.5 text-xs">
+                {t.nav.contact}
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

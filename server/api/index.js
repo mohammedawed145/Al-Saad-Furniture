@@ -1,11 +1,12 @@
 import { app } from '../server.js';
 import { connectDb } from '../config/db.js';
+import { bootstrapCatalog } from '../services/bootstrapCatalog.js';
 
 let connectionPromise;
 
 export default async function handler(req, res) {
   try {
-    connectionPromise ||= connectDb();
+    connectionPromise ||= connectDb().then(bootstrapCatalog);
 
     await connectionPromise;
 

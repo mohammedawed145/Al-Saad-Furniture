@@ -1,11 +1,11 @@
 import { NavLink, Outlet, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Sofa, Tags, MapPin, Mail, LogOut } from 'lucide-react';
+import { LayoutDashboard, Sofa, Tags, MapPin, Mail, LogOut, Languages } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LanguageContext';
 
 export function AdminLayout() {
   const { admin, ready, logout } = useAuth();
-  const { t } = useLang();
+  const { t, isAr, setLang } = useLang();
 
   if (!ready) return <div className="p-10">{t.common.loading}</div>;
   if (!admin) return <Navigate to="/admin/login" replace />;
@@ -23,6 +23,14 @@ export function AdminLayout() {
       <aside className="border-b border-ink/10 bg-ink p-6 text-cream lg:w-64 lg:border-b-0 lg:border-e">
         <p className="font-display text-2xl">{t.brand}</p>
         <p className="mt-1 text-xs text-cream/50">{admin.email}</p>
+        <button
+          type="button"
+          onClick={() => setLang(isAr ? 'en' : 'ar')}
+          className="mt-5 inline-flex items-center gap-2 rounded-lg border border-cream/20 px-3 py-2 text-sm text-cream/85 transition hover:border-cream/50 hover:text-cream"
+        >
+          <Languages className="h-4 w-4" />
+          {isAr ? 'English' : 'العربية'}
+        </button>
         <nav className="mt-8 grid grid-cols-2 gap-2 lg:grid-cols-1">
           {links.map((link) => (
             <NavLink

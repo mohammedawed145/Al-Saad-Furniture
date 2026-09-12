@@ -58,8 +58,11 @@ export function ContactPage() {
       });
       setForm(empty);
       setStatus({ type: 'ok', text: t.contact.success });
-    } catch {
-      setStatus({ type: 'err', text: t.contact.error });
+    } catch (error) {
+      setStatus({
+        type: 'err',
+        text: error.response?.data?.message || t.contact.error,
+      });
     } finally {
       setSending(false);
     }

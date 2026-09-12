@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { useLang } from '../context/LanguageContext';
 import { mediaUrl } from '../services/api';
 
+const FALLBACK_PRODUCT_IMAGE =
+  'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80';
+
 export function ProductCard({ product }) {
   const { t, isAr } = useLang();
-  const name = isAr ? product.nameAr : product.nameEn;
-  const desc = isAr ? product.descriptionAr : product.descriptionEn;
+  const name = (isAr ? product.nameAr : product.nameEn) || product.name || 'Furniture piece';
+  const desc = (isAr ? product.descriptionAr : product.descriptionEn) || product.description || '';
   const category = isAr ? product.category?.nameAr : product.category?.nameEn;
   const image = mediaUrl(product.images?.[0]);
 
@@ -21,6 +24,10 @@ export function ProductCard({ product }) {
           src={image}
           alt={name}
           loading="lazy"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+          }}
           className="h-64 w-full object-cover transition duration-700 group-hover:scale-105"
         />
       </Link>

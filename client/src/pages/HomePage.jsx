@@ -55,7 +55,7 @@ export function HomePage() {
               <Link to="/products" className="btn-gold">
                 {t.hero.explore}
               </Link>
-              <Link to="/contact" className="btn-outline border-cream/40 text-cream hover:bg-cream hover:text-ink">
+              <Link to="/contact" className="btn-outline border-cream bg-cream text-ink shadow-lg hover:border-gold hover:bg-gold hover:text-ink">
                 {t.hero.contact}
               </Link>
             </motion.div>

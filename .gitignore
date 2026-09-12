@@ -8,3 +8,5 @@ server/uploads/*
 client/.env
 .vscode/
 Thumbs.db
+.vercel
+.env*
