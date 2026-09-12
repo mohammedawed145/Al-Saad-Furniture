@@ -2,12 +2,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Admin } from '../models/Admin.js';
 import { config } from '../config/env.js';
-import { isValidEmail, requiredString } from '../utils/validate.js';
+import { boundedString, isValidEmail } from '../utils/validate.js';
 
 export async function login(req, res, next) {
   try {
-    const email = requiredString(req.body.email, 'Email').toLowerCase();
-    const password = requiredString(req.body.password, 'Password');
+    const email = boundedString(req.body.email, 'Email', 254, 3).toLowerCase();
+    const password = boundedString(req.body.password, 'Password', 256, 1);
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: 'Invalid email' });
     }

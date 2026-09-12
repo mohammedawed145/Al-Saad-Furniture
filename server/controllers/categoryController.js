@@ -1,7 +1,7 @@
 import { Category } from '../models/Category.js';
 import { Product } from '../models/Product.js';
 import { deleteStoredImage, saveUploadedFile } from '../services/media.js';
-import { requiredString } from '../utils/validate.js';
+import { boundedString } from '../utils/validate.js';
 
 function slugify(value) {
   return String(value)
@@ -23,8 +23,8 @@ export async function listCategories(_req, res, next) {
 
 export async function createCategory(req, res, next) {
   try {
-    const nameEn = requiredString(req.body.nameEn, 'Name (EN)');
-    const nameAr = requiredString(req.body.nameAr, 'Name (AR)');
+    const nameEn = boundedString(req.body.nameEn, 'Name (EN)', 120, 1);
+    const nameAr = boundedString(req.body.nameAr, 'Name (AR)', 120, 1);
     let image = req.body.image || '';
     if (req.file) image = await saveUploadedFile(req.file);
     const slug = slugify(req.body.slug || nameEn) || `category-${Date.now()}`;
@@ -44,8 +44,8 @@ export async function updateCategory(req, res, next) {
     const category = await Category.findById(req.params.id);
     if (!category) return res.status(404).json({ message: 'Category not found' });
 
-    if (req.body.nameEn) category.nameEn = requiredString(req.body.nameEn, 'Name (EN)');
-    if (req.body.nameAr) category.nameAr = requiredString(req.body.nameAr, 'Name (AR)');
+    if (req.body.nameEn !== undefined) category.nameEn = boundedString(req.body.nameEn, 'Name (EN)', 120, 1);
+    if (req.body.nameAr !== undefined) category.nameAr = boundedString(req.body.nameAr, 'Name (AR)', 120, 1);
     if (req.body.slug) category.slug = slugify(req.body.slug);
     if (req.file) {
       deleteStoredImage(category.image);

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Product } from '../models/Product.js';
 import { Category } from '../models/Category.js';
 import { deleteStoredImage, saveUploadedFiles } from '../services/media.js';
-import { escapeRegex, parseStringList, requiredString } from '../utils/validate.js';
+import { boundedString, escapeRegex, parseStringList } from '../utils/validate.js';
 
 function parseExistingImages(value) {
   if (Array.isArray(value)) return value.filter(Boolean);
@@ -105,11 +105,11 @@ export async function getProduct(req, res, next) {
 
 export async function createProduct(req, res, next) {
   try {
-    const nameEn = requiredString(req.body.nameEn, 'Name (EN)');
-    const nameAr = requiredString(req.body.nameAr, 'Name (AR)');
-    const category = requiredString(req.body.category, 'Category');
-    const descriptionEn = requiredString(req.body.descriptionEn, 'Description (EN)');
-    const descriptionAr = requiredString(req.body.descriptionAr, 'Description (AR)');
+    const nameEn = boundedString(req.body.nameEn, 'Name (EN)', 160, 1);
+    const nameAr = boundedString(req.body.nameAr, 'Name (AR)', 160, 1);
+    const category = boundedString(req.body.category, 'Category', 100, 1);
+    const descriptionEn = boundedString(req.body.descriptionEn, 'Description (EN)', 5000, 1);
+    const descriptionAr = boundedString(req.body.descriptionAr, 'Description (AR)', 5000, 1);
     const exists = await Category.findById(category);
     if (!exists) return res.status(400).json({ message: 'Invalid category' });
 
@@ -138,10 +138,10 @@ export async function updateProduct(req, res, next) {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
 
-    if (req.body.nameEn) product.nameEn = requiredString(req.body.nameEn, 'Name (EN)');
-    if (req.body.nameAr) product.nameAr = requiredString(req.body.nameAr, 'Name (AR)');
-    if (req.body.descriptionEn) product.descriptionEn = requiredString(req.body.descriptionEn, 'Description (EN)');
-    if (req.body.descriptionAr) product.descriptionAr = requiredString(req.body.descriptionAr, 'Description (AR)');
+    if (req.body.nameEn !== undefined) product.nameEn = boundedString(req.body.nameEn, 'Name (EN)', 160, 1);
+    if (req.body.nameAr !== undefined) product.nameAr = boundedString(req.body.nameAr, 'Name (AR)', 160, 1);
+    if (req.body.descriptionEn !== undefined) product.descriptionEn = boundedString(req.body.descriptionEn, 'Description (EN)', 5000, 1);
+    if (req.body.descriptionAr !== undefined) product.descriptionAr = boundedString(req.body.descriptionAr, 'Description (AR)', 5000, 1);
     if (req.body.category) {
       const exists = await Category.findById(req.body.category);
       if (!exists) return res.status(400).json({ message: 'Invalid category' });

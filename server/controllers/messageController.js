@@ -1,19 +1,19 @@
 import { Message } from '../models/Message.js';
 import { Product } from '../models/Product.js';
-import { isValidEmail, requiredString } from '../utils/validate.js';
+import { boundedString, isValidEmail } from '../utils/validate.js';
 import { notifyNewMessage } from '../services/notifications.js';
 
 export async function createMessage(req, res, next) {
   try {
-    const name = requiredString(req.body.name, 'Name');
-    const email = requiredString(req.body.email, 'Email').toLowerCase();
-    const phone = requiredString(req.body.phone, 'Phone');
-    const message = requiredString(req.body.message, 'Message');
+    const name = boundedString(req.body.name, 'Name', 100, 1);
+    const email = boundedString(req.body.email, 'Email', 254, 3).toLowerCase();
+    const phone = boundedString(req.body.phone, 'Phone', 40, 1);
+    const message = boundedString(req.body.message, 'Message', 3000, 1);
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: 'Invalid email address' });
     }
 
-    let productName = req.body.productName || '';
+    let productName = boundedString(req.body.productName || '', 'Product name', 200);
     let productId = req.body.productId || null;
     if (productId) {
       const product = await Product.findById(productId);
