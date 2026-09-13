@@ -4,7 +4,7 @@ A bilingual (Arabic / English) furniture **showroom catalog**. Visitors browse p
 
 ## Live deployment
 
-- Website: https://al-saad-furniture-three.vercel.app
+- Website: https://al-saad-furniture-beta.vercel.app
 - API: https://al-saad-api.vercel.app/api
 
 ## Stack
@@ -104,7 +104,7 @@ Home → Products (search / filter) → Product details → Contact Us (`/contac
 - Deploy `server/` as a Vercel project. Set its Root Directory to `server`; Vercel will use `api/index.js` as the serverless entry point.
 - Deploy `client/` as a Vite project on Vercel with build command `npm run build` and output directory `dist`.
 - Set `VITE_API_URL` to `https://al-saad-api.vercel.app/api`.
-- Set `CLIENT_ORIGIN` in the API project to `https://al-saad-furniture-three.vercel.app`.
+- Set `CLIENT_ORIGIN` in the API project to `https://al-saad-furniture-beta.vercel.app`.
 - In the API project's Vercel environment, set `MONGODB_URI`, `JWT_SECRET`, `CLIENT_ORIGIN`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
 - From a trusted local terminal with those same production variables, run `npm run reset-admin` in `server/` once. This creates the production admin account without changing catalog data.
 - Do not use `npm run seed` on a live catalog: it replaces products, categories, and branches with demo data.
