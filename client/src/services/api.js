@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const TOKEN_KEY = 'alsaad_admin_token';
+import { TOKEN_KEY } from '../constants/auth';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',

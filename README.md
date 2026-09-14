@@ -4,7 +4,7 @@ A bilingual (Arabic / English) furniture **showroom catalog**. Visitors browse p
 
 ## Live deployment
 
-- Website: https://al-saad-furniture-three.vercel.app
+- Website: https://alsaadfurniture.com (after domain purchase and Vercel DNS setup)
 - API: https://al-saad-api.vercel.app/api
 
 ## Stack
@@ -34,7 +34,7 @@ JWT_SECRET=use-a-long-random-string
 PORT=5000
 CLIENT_ORIGIN=http://localhost:5173
 ADMIN_EMAIL=admin@alsaad.local
-ADMIN_PASSWORD=ChangeMe123!
+ADMIN_PASSWORD=replace-with-a-unique-password-at-least-12-characters
 ```
 
 Replace placeholder branch phone numbers, WhatsApp, email, addresses, and Google Maps URLs from **Admin → Branches**. Do not commit real credentials.
@@ -104,7 +104,7 @@ Home → Products (search / filter) → Product details → Contact Us (`/contac
 - Deploy `server/` as a Vercel project. Set its Root Directory to `server`; Vercel will use `api/index.js` as the serverless entry point.
 - Deploy `client/` as a Vite project on Vercel with build command `npm run build` and output directory `dist`.
 - Set `VITE_API_URL` to `https://al-saad-api.vercel.app/api`.
-- Set `CLIENT_ORIGIN` in the API project to `https://al-saad-furniture-three.vercel.app`.
+- Set `CLIENT_ORIGIN` in the API project to `https://alsaadfurniture.com` after the custom domain is connected.
 - In the API project's Vercel environment, set `MONGODB_URI`, `JWT_SECRET`, `CLIENT_ORIGIN`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
 - From a trusted local terminal with those same production variables, run `npm run reset-admin` in `server/` once. This creates the production admin account without changing catalog data.
 - Do not use `npm run seed` on a live catalog: it replaces products, categories, and branches with demo data.

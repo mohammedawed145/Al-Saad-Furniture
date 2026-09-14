@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../services/api';
+import { TOKEN_KEY } from '../constants/auth';
 
 const AuthContext = createContext(null);
-const TOKEN_KEY = 'alsaad_admin_token';
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || '');
