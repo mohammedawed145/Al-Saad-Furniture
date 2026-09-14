@@ -30,7 +30,7 @@ export function AdminCategoriesPage() {
       setForm({ nameEn: '', nameAr: '', id: null });
       setFile(null);
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Unable to save category');
+      setFormError(err.response?.data?.message || t.admin.saveError);
     } finally {
       setBusy(false);
     }
@@ -55,15 +55,15 @@ export function AdminCategoriesPage() {
       <h1 className="font-display text-4xl">{t.admin.categories}</h1>
       <form onSubmit={save} className="mt-8 grid gap-4 rounded-3xl bg-white p-6 md:grid-cols-2">
         <div>
-          <label className="label">Name EN</label>
+          <label className="label">{t.admin.nameEn}</label>
           <input className="input" value={form.nameEn} onChange={(e) => setForm({ ...form, nameEn: e.target.value })} />
         </div>
         <div>
-          <label className="label">Name AR</label>
+          <label className="label">{t.admin.nameAr}</label>
           <input className="input" value={form.nameAr} onChange={(e) => setForm({ ...form, nameAr: e.target.value })} />
         </div>
         <div className="md:col-span-2">
-          <label className="label">Image</label>
+          <label className="label">{t.admin.image}</label>
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setFile(e.target.files?.[0] || null)} />
         </div>
         {formError && <p className="text-sm text-red-600 md:col-span-2">{formError}</p>}

@@ -37,7 +37,7 @@ export function AdminBranchesPage() {
       setForm(blank);
       setId(null);
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Unable to save branch');
+      setFormError(err.response?.data?.message || t.admin.saveError);
     } finally {
       setBusy(false);
     }
@@ -57,16 +57,16 @@ export function AdminBranchesPage() {
   if (error) return <ErrorState message={t.branches.error} onRetry={retry} />;
 
   const fields = [
-    ['nameEn', 'Branch Name EN'],
-    ['nameAr', 'Branch Name AR'],
-    ['addressEn', 'Address EN'],
-    ['addressAr', 'Address AR'],
-    ['phone', 'Phone'],
-    ['whatsapp', 'WhatsApp'],
-    ['email', 'Email'],
-    ['openingHoursEn', 'Opening Hours EN'],
-    ['openingHoursAr', 'Opening Hours AR'],
-    ['googleMapsUrl', 'Google Maps URL'],
+    ['nameEn', t.admin.branchNameEn],
+    ['nameAr', t.admin.branchNameAr],
+    ['addressEn', t.admin.addressEn],
+    ['addressAr', t.admin.addressAr],
+    ['phone', t.admin.phone],
+    ['whatsapp', t.contact.whatsapp],
+    ['email', t.contact.email],
+    ['openingHoursEn', t.admin.openingHoursEn],
+    ['openingHoursAr', t.admin.openingHoursAr],
+    ['googleMapsUrl', t.admin.mapsUrl],
   ];
 
   return (

@@ -64,7 +64,7 @@ export function AdminProductsPage() {
     const next = Array.from(e.target.files || []);
     const tooBig = next.find((file) => file.size > 5 * 1024 * 1024);
     if (tooBig) {
-      setFormError('Each image must be 5MB or smaller.');
+      setFormError(isAr ? 'يجب ألا يتجاوز حجم كل صورة 5 ميجابايت.' : 'Each image must be 5MB or smaller.');
       return;
     }
     setFiles(next);
@@ -87,7 +87,7 @@ export function AdminProductsPage() {
       else setData(products.map((item) => (item._id === editing ? res.data : item)));
       setEditing(null);
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Unable to save product');
+      setFormError(err.response?.data?.message || t.admin.saveError);
     } finally {
       setBusy(false);
     }
@@ -120,10 +120,10 @@ export function AdminProductsPage() {
         <form onSubmit={save} className="mt-8 space-y-4 rounded-3xl bg-white p-6">
           <h2 className="font-display text-2xl">{title}</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Name EN" value={form.nameEn} onChange={(v) => setForm({ ...form, nameEn: v })} />
-            <Field label="Name AR" value={form.nameAr} onChange={(v) => setForm({ ...form, nameAr: v })} />
+            <Field label={t.admin.nameEn} value={form.nameEn} onChange={(v) => setForm({ ...form, nameEn: v })} />
+            <Field label={t.admin.nameAr} value={form.nameAr} onChange={(v) => setForm({ ...form, nameAr: v })} />
             <div>
-              <label className="label">Category</label>
+              <label className="label">{t.admin.category}</label>
               <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                 {cats.map((item) => (
                   <option key={item._id} value={item._id}>
@@ -136,10 +136,10 @@ export function AdminProductsPage() {
               <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} />
               {t.admin.featured}
             </label>
-            <Area label="Description EN" value={form.descriptionEn} onChange={(v) => setForm({ ...form, descriptionEn: v })} />
-            <Area label="Description AR" value={form.descriptionAr} onChange={(v) => setForm({ ...form, descriptionAr: v })} />
-            <Area label="Features EN (one per line)" value={form.featuresEn} onChange={(v) => setForm({ ...form, featuresEn: v })} />
-            <Area label="Features AR (one per line)" value={form.featuresAr} onChange={(v) => setForm({ ...form, featuresAr: v })} />
+            <Area label={t.admin.descriptionEn} value={form.descriptionEn} onChange={(v) => setForm({ ...form, descriptionEn: v })} />
+            <Area label={t.admin.descriptionAr} value={form.descriptionAr} onChange={(v) => setForm({ ...form, descriptionAr: v })} />
+            <Area label={t.admin.featuresEn} value={form.featuresEn} onChange={(v) => setForm({ ...form, featuresEn: v })} />
+            <Area label={t.admin.featuresAr} value={form.featuresAr} onChange={(v) => setForm({ ...form, featuresAr: v })} />
           </div>
           <div>
             <label className="label">{t.admin.images}</label>
@@ -175,7 +175,7 @@ export function AdminProductsPage() {
               <tr>
                 <th className="p-4">EN</th>
                 <th className="p-4">AR</th>
-                <th className="p-4">Category</th>
+                <th className="p-4">{t.admin.category}</th>
                 <th className="p-4">{t.admin.featured}</th>
                 <th className="p-4" />
               </tr>

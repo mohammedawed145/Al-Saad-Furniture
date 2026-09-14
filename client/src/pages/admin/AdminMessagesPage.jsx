@@ -63,7 +63,7 @@ export function AdminMessagesPage() {
                     <select className="input py-2" value={item.status} onChange={(e) => updateStatus(item._id, e.target.value)}>
                       {statuses.map((status) => (
                         <option key={status} value={status}>
-                          {status}
+                          {t.admin.statuses[status] || status}
                         </option>
                       ))}
                     </select>

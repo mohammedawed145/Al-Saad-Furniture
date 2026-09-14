@@ -23,7 +23,7 @@ export function AdminLoginPage() {
       await login(email, password);
       navigate('/admin');
     } catch {
-      setError('Invalid credentials');
+      setError(t.admin.invalidCredentials);
     } finally {
       setBusy(false);
     }

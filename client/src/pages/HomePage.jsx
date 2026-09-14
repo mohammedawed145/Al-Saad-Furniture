@@ -6,6 +6,7 @@ import { Reveal } from '../components/Motion';
 import { EmptyState, ErrorState, Spinner } from '../components/States';
 import { useFetch } from '../hooks/useFetch';
 import { useLang } from '../context/LanguageContext';
+import { whatsappLink } from '../services/api';
 
 const HERO =
   'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=80';
@@ -55,6 +56,14 @@ export function HomePage() {
               <Link to="/products" className="btn-gold">
                 {t.hero.explore}
               </Link>
+              <a
+                href={whatsappLink('201064990995', t.hero.whatsappMessage)}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-outline border-cream bg-cream text-ink shadow-lg hover:border-gold hover:bg-gold hover:text-ink"
+              >
+                {t.hero.whatsapp}
+              </a>
               <Link to="/contact" className="btn-outline border-cream bg-cream text-ink shadow-lg hover:border-gold hover:bg-gold hover:text-ink">
                 {t.hero.contact}
               </Link>

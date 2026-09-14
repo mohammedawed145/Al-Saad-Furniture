@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useLang } from '../context/LanguageContext';
-import { mediaUrl } from '../services/api';
+import { mediaUrl, whatsappLink } from '../services/api';
 
 const FALLBACK_PRODUCT_IMAGE =
   'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80';
@@ -39,9 +39,14 @@ export function ProductCard({ product }) {
           <Link to={`/products/${product._id}`} className="btn-outline py-2 text-xs">
             {t.product.view}
           </Link>
-          <Link to={`/contact?product=${product._id}`} className="btn-primary py-2 text-xs">
+          <a
+            href={whatsappLink('201064990995', `${t.product.interested}: ${name}`)}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary py-2 text-xs"
+          >
             {t.product.contact}
-          </Link>
+          </a>
         </div>
       </div>
     </motion.article>

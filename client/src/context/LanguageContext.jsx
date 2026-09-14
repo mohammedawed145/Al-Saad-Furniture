@@ -4,7 +4,9 @@ import { translations } from '../i18n/translations';
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'en');
+  // The showroom primarily serves Arabic-speaking customers; keep an explicit
+  // user choice, but make Arabic the first-visit default.
+  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'ar');
 
   useEffect(() => {
     const dict = translations[lang] || translations.en;
